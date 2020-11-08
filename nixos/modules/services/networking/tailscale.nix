@@ -2,7 +2,9 @@
 
 with lib;
 
-let cfg = config.services.tailscale;
+let
+  cfg = config.services.tailscale;
+  bleeding = ../../../../pkgs;
 in {
   meta.maintainers = with maintainers; [ danderson mbaillie ];
 
@@ -17,8 +19,8 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.tailscale ]; # for the CLI
-    systemd.packages = [ pkgs.tailscale ];
+    environment.systemPackages = [ bleeding.tailscale ]; # for the CLI
+    systemd.packages = [ bleeding.tailscale ];
     systemd.services.tailscaled = {
       wantedBy = [ "multi-user.target" ];
       serviceConfig.Environment = "PORT=${toString cfg.port}";
